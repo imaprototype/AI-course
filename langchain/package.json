@@ -1,0 +1,21 @@
+{
+  "name": "langchain-root",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "index": "node -r ts-node/register --env-file=.env src/Index.ts",
+    "template": "node -r ts-node/register --env-file=.env src/PromptParsers.ts",
+    "parser": "node -r ts-node/register --env-file=.env src/OutputParsers.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@langchain/community": "^0.3.16",
+    "@types/node": "^22.10.1",
+    "langchain": "^0.3.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
