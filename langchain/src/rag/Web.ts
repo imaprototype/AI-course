@@ -1,39 +1,34 @@
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { Document } from "@langchain/core/documents";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 
 const model = new ChatOpenAI({
     modelName: process.env.MODEL_VERSION!,
     temperature: 0.7,
 });
 
-console.log(model);
-
-// We will need to save this in a vector
-const myData = [
-    "My name is Juan",
-    "My name is Javi",
-    "My name is Bob",
-    "I like pizza",
-    "I like gazpacho",
-    "I like pineapple",
-];
-
-const question = "What's my favourite food?";
+const question = "What's the main topic of the website?";
 
 async function main() {
+    // Create the loader
+    const loader = new CheerioWebBaseLoader("https://rootdigital.agency");
+    const docs = await loader.load();
+
+    // create a splitter
+    const splitter = new RecursiveCharacterTextSplitter({
+        chunkSize: 200,
+        chunkOverlap: 20,
+    });
+
+    const splitDocs = await splitter.splitDocuments(docs)
+
+
     // Store data
     const vectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
 
-    await vectorStore.addDocuments(
-        myData.map(
-            (content) =>
-                new Document({
-                    pageContent: content,
-                })
-        )
-    );
+    await vectorStore.addDocuments(splitDocs);
 
     // Create data retriever
     const retriever = vectorStore.asRetriever({
@@ -55,5 +50,7 @@ async function main() {
         input: question,
         context: resultDocs,
     });
+
+    console.log(response.content);
 }
 main();
