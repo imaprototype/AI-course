@@ -8,6 +8,7 @@
     "parser": "node -r ts-node/register --env-file=.env src/OutputParsers.ts",
     "rag": "node -r ts-node/register --env-file=.env src/rag/Basic.ts",
     "pdf": "node -r ts-node/register --env-file=.env src/rag/Pdf.ts",
+    "chromapdf": "node -r ts-node/register --env-file=.env src/rag/ChromaPdf.ts",
     "web": "node -r ts-node/register --env-file=.env src/rag/Web.ts"
   },
   "keywords": [],
@@ -23,7 +24,9 @@
   },
   "dependencies": {
     "@langchain/core": "^0.3.20",
+    "@langchain/openai": "^0.3.14",
     "cheerio": "^1.0.0",
+    "chromadb": "^1.9.4",
     "pdf-parse": "^1.1.1"
   }
 }
