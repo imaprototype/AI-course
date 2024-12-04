@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node -r ts-node/register --env-file=.env src/index.ts"
+    "start": "node -r ts-node/register --env-file=.env src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@huggingface/inference": "^2.8.1",
     "openai": "^4.73.1"
   },
   "devDependencies": {

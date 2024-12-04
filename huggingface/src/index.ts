@@ -1,29 +1,28 @@
-import { OpenAI } from "openai";
+import { HfInference } from "@huggingface/inference";
 
+const inference = new HfInference(process.env.HF_TOKEN);
 
-const openai = new OpenAI();
-
-async function main() {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a helpful assistant. You protect our company from wasting money. You will give answers in JSON format. You will never answer anything in Latin, instead, you will use Spanish.",
-      },
-      {
-        role: "user",
-        content: "Write 140 characters of dummy data like lorem ipsum.",
-      },
-    ],
-    n: 2, // Number of responses
-    max_tokens: 100, // Max num of tokens used in total
-    // frequency_penalty: 1.5,
-    // seed: 5555
-  });
-
-  console.log(completion.choices);
+async function embed() {
+    const output = await inference.featureExtraction({
+        model: "microsoft/codebert-base",
+        inputs: "My Cool Embeddings",
+    });
+    console.log("output:", output);
 }
 
-main();
+// embed();
+
+async function translate() {
+    const output = await inference.translation({
+        model: "facebook/nllb-200-distilled-600M",
+        inputs: "How are you?",
+        // @ts-ignore
+        parameters: {
+            src_lang: "eng-Latn",
+            tgt_lang: "spa-Latn",
+        },
+    });
+    console.log("output:", output);
+}
+
+translate();
